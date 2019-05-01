@@ -13,16 +13,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//User is a struct
-type User struct {
-	CategoryID  int     `json:"category_id,omitempty"`
+//Nutrients is a struct
+type Nutrients struct {
+	NutrientsID int     `json:"nutrients_id,omitempty"`
 	Name        string  `json:"name,omitempty"`
 	Energy      int     `json:"energy,omitempty"`
 	Protein     float32 `json:"protein,omitempty"`
 	Phenylanine float32 `json:"phenylanine,omitempty"`
 }
 
-func users(w http.ResponseWriter, r *http.Request) {
+func allFoods(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("GO MYSQL")
 
@@ -31,38 +31,38 @@ func users(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err in db", err)
 	}
 
-	rows, err := db.Query("SELECT * FROM search")
+	rows, err := db.Query("SELECT * FROM food_table")
 	if err != nil {
 		fmt.Println("NO rows", err)
 		return
 	}
 
-	var users []User
+	var allFoods []Nutrients
 
 	for rows.Next() {
 
-		var CategoryID int
+		var NutrientsID int
 		var Name string
 		var Energy int
 		var Protein float32
 		var Phenylanine float32
 
-		err := rows.Scan(&CategoryID, &Name, &Energy, &Protein, &Phenylanine)
-		users := append(users, User{CategoryID, Name, Energy, Protein, Phenylanine})
+		err := rows.Scan(&NutrientsID, &Name, &Energy, &Protein, &Phenylanine)
+		allFoods := append(allFoods, Nutrients{NutrientsID, Name, Energy, Protein, Phenylanine})
 
 		if err != nil {
 			fmt.Println("rows failed", err)
 			return
 		}
 
-		usersBytes, _ := json.Marshal(&users)
+		allFoodsBytes, _ := json.Marshal(&allFoods)
 
-		w.Write(usersBytes)
+		w.Write(allFoodsBytes)
 		defer db.Close()
 	}
 }
 func main() {
-	http.HandleFunc("/", users)
+	http.HandleFunc("/", allFoods)
 	log.Fatal(http.ListenAndServe(":8083", nil))
 
 }
