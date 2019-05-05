@@ -31,7 +31,7 @@ func allFoods(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err in db", err)
 	}
 
-	rows, err := db.Query("SELECT * FROM food_table")
+	rows, err := db.Query("SELECT * FROM FOOD_TABLE")
 	if err != nil {
 		fmt.Println("NO rows", err)
 		return
