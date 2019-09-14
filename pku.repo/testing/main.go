@@ -26,7 +26,7 @@ func allFoods(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("GO MYSQL")
 
-	db, err := sql.Open("mysql", "root:pass1@tcp(127.0.0.1:3306)/pku")
+	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/pku")
 	if err != nil {
 		fmt.Println("err in db", err)
 	}
